@@ -1,0 +1,55 @@
+type Cashier {
+    id: ID!
+    merchantId: Int
+    name: String
+    createdAt: String
+    updatedAt: String
+}
+
+type CashierDeleteAt {
+    id: ID!
+    merchantId: Int
+    name: String
+    createdAt: String
+    updatedAt: String
+    deletedAt: String
+}
+
+type CashierPage {
+    data: [Cashier!]!
+    pagination: PaginationMeta!
+}
+
+type CashierDeleteAtPage {
+    data: [CashierDeleteAt!]!
+    pagination: PaginationMeta!
+}
+
+input CreateCashierInput {
+    merchantId: ID!
+    userId: ID!
+    name: String!
+}
+
+input UpdateCashierInput {
+    cashierId: ID!
+    name: String!
+}
+
+extend type Query {
+    cashiers(page: Int = 1, pageSize: Int = 10, search: String = ""): CashierPage!
+    cashier(id: ID!): Cashier!
+    activeCashiers(page: Int = 1, pageSize: Int = 10, search: String = ""): CashierDeleteAtPage!
+    trashedCashiers(page: Int = 1, pageSize: Int = 10, search: String = ""): CashierDeleteAtPage!
+    cashiersByMerchant(merchantId: ID!, page: Int = 1, pageSize: Int = 10, search: String = ""): CashierPage!
+}
+
+extend type Mutation {
+    createCashier(input: CreateCashierInput!): Cashier!
+    updateCashier(input: UpdateCashierInput!): Cashier!
+    trashCashier(id: ID!): CashierDeleteAt!
+    restoreCashier(id: ID!): CashierDeleteAt!
+    deleteCashierPermanent(id: ID!): Boolean!
+    restoreAllCashiers: Boolean!
+    deleteAllCashiersPermanent: Boolean!
+}

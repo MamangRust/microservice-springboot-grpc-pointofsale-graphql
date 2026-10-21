@@ -1,0 +1,6 @@
+type PaginationMeta {
+    page: Int!
+    pageSize: Int!
+    totalItems: Int!
+    totalPages: Int!
+}

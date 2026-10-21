@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package pb.stats;
+
+option java_multiple_files = true;
+option java_package = "com.sanedge.pointofsale.pb.stats";
+
+option go_package = "github.com/MamangRust/pointofsale-shared/pb";
+
+// StatsReaderService is the centralized ClickHouse-backed analytics reader.
+// It is served by the `stats-reader` microservice (gRPC 9017).
+service StatsReaderService {
+    rpc FindMonthlyTotalRevenue(StatsRequest) returns (StatsResponse);
+    rpc FindYearlyTotalRevenue(StatsRequest) returns (StatsResponse);
+    rpc FindMerchantSales(StatsRequest) returns (StatsResponse);
+    rpc FindProductSales(StatsRequest) returns (StatsResponse);
+}
+
+message StatsRequest {
+    int32 year = 1;
+    int32 month = 2;
+    int64 merchant_id = 3;
+    int64 product_id = 4;
+}
+
+message StatItem {
+    string period = 1;     // "YYYY-MM" for monthly, "YYYY" for yearly
+    int64 dimension_id = 2; // merchant_id / product_id depending on the metric
+    double value = 3;       // aggregated revenue
+}
+
+message StatsResponse {
+    string status = 1;
+    string message = 2;
+    repeated StatItem data = 3;
+}

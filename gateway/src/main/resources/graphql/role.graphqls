@@ -1,0 +1,52 @@
+type Role {
+    id: ID!
+    name: String
+    createdAt: String
+    updatedAt: String
+}
+
+type RoleDeleteAt {
+    id: ID!
+    name: String
+    createdAt: String
+    updatedAt: String
+    deletedAt: String
+}
+
+type RolePage {
+    data: [Role!]!
+    pagination: PaginationMeta!
+}
+
+type RoleDeleteAtPage {
+    data: [RoleDeleteAt!]!
+    pagination: PaginationMeta!
+}
+
+input CreateRoleInput {
+    name: String!
+}
+
+input UpdateRoleInput {
+    id: ID!
+    name: String!
+}
+
+extend type Query {
+    roles(page: Int = 1, pageSize: Int = 10, search: String = ""): RolePage!
+    role(id: ID!): Role!
+    activeRoles(page: Int = 1, pageSize: Int = 10, search: String = ""): RoleDeleteAtPage!
+    trashedRoles(page: Int = 1, pageSize: Int = 10, search: String = ""): RoleDeleteAtPage!
+    rolesByUser(userId: ID!): [Role!]!
+    roleByName(name: String!): Role!
+}
+
+extend type Mutation {
+    createRole(input: CreateRoleInput!): Role!
+    updateRole(input: UpdateRoleInput!): Role!
+    trashRole(id: ID!): RoleDeleteAt!
+    restoreRole(id: ID!): RoleDeleteAt!
+    deleteRolePermanent(id: ID!): Boolean!
+    restoreAllRoles: Boolean!
+    deleteAllRolesPermanent: Boolean!
+}

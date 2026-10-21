@@ -1,0 +1,60 @@
+type Category {
+    id: ID!
+    name: String
+    description: String
+    slugCategory: String
+    imageCategory: String
+    createdAt: String
+    updatedAt: String
+}
+
+type CategoryDeleteAt {
+    id: ID!
+    name: String
+    description: String
+    slugCategory: String
+    imageCategory: String
+    createdAt: String
+    updatedAt: String
+    deletedAt: String
+}
+
+type CategoryPage {
+    data: [Category!]!
+    pagination: PaginationMeta!
+}
+
+type CategoryDeleteAtPage {
+    data: [CategoryDeleteAt!]!
+    pagination: PaginationMeta!
+}
+
+input CreateCategoryInput {
+    name: String!
+    description: String!
+    slugCategory: String
+}
+
+input UpdateCategoryInput {
+    categoryId: ID!
+    name: String
+    description: String
+    slugCategory: String
+}
+
+extend type Query {
+    categories(page: Int = 1, pageSize: Int = 10, search: String = ""): CategoryPage!
+    category(id: ID!): Category!
+    activeCategories(page: Int = 1, pageSize: Int = 10, search: String = ""): CategoryDeleteAtPage!
+    trashedCategories(page: Int = 1, pageSize: Int = 10, search: String = ""): CategoryDeleteAtPage!
+}
+
+extend type Mutation {
+    createCategory(input: CreateCategoryInput!): Category!
+    updateCategory(input: UpdateCategoryInput!): Category!
+    trashCategory(id: ID!): CategoryDeleteAt!
+    restoreCategory(id: ID!): CategoryDeleteAt!
+    deleteCategoryPermanent(id: ID!): Boolean!
+    restoreAllCategories: Boolean!
+    deleteAllCategoriesPermanent: Boolean!
+}

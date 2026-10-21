@@ -1,0 +1,32 @@
+type Token {
+    accessToken: String!
+    refreshToken: String!
+}
+
+input RegisterInput {
+    firstname: String!
+    username: String!
+    lastname: String!
+    email: String!
+    password: String!
+    confirmPassword: String!
+}
+
+input LoginInput {
+    "Email or username, depending on the account."
+    username: String!
+    password: String!
+}
+
+extend type Query {
+    "User profile of the currently authenticated principal."
+    me: User
+    "Liveness probe (kept from the former REST endpoint)."
+    healthchecker: String!
+}
+
+extend type Mutation {
+    register(input: RegisterInput!): User!
+    login(input: LoginInput!): Token!
+    refreshToken(refreshToken: String!): Token!
+}

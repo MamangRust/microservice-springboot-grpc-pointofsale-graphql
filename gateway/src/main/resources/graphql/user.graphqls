@@ -1,0 +1,65 @@
+type User {
+    id: ID!
+    username: String
+    firstname: String
+    lastname: String
+    email: String
+    createdAt: String
+    updatedAt: String
+}
+
+type UserDeleteAt {
+    id: ID!
+    firstname: String
+    lastname: String
+    email: String
+    createdAt: String
+    updatedAt: String
+    deletedAt: String
+}
+
+type UserPage {
+    data: [User!]!
+    pagination: PaginationMeta!
+}
+
+type UserDeleteAtPage {
+    data: [UserDeleteAt!]!
+    pagination: PaginationMeta!
+}
+
+input CreateUserInput {
+    username: String!
+    firstname: String!
+    lastname: String!
+    email: String!
+    password: String!
+    confirmPassword: String!
+}
+
+input UpdateUserInput {
+    id: ID!
+    username: String
+    firstname: String
+    lastname: String
+    email: String
+    password: String
+    confirmPassword: String
+}
+
+extend type Query {
+    users(page: Int = 1, pageSize: Int = 10, search: String = ""): UserPage!
+    user(id: ID!): User!
+    activeUsers(page: Int = 1, pageSize: Int = 10, search: String = ""): UserDeleteAtPage!
+    trashedUsers(page: Int = 1, pageSize: Int = 10, search: String = ""): UserDeleteAtPage!
+}
+
+extend type Mutation {
+    createUser(input: CreateUserInput!): User!
+    updateUser(input: UpdateUserInput!): User!
+    trashUser(id: ID!): UserDeleteAt!
+    restoreUser(id: ID!): UserDeleteAt!
+    deleteUserPermanent(id: ID!): Boolean!
+    restoreAllUsers: Boolean!
+    deleteAllUsersPermanent: Boolean!
+}

@@ -1,0 +1,10 @@
+# Root schema. Domain files extend Query/Mutation.
+# The gateway is a BFF: every field proxies a downstream gRPC service.
+
+type Query {
+    _root: Boolean
+}
+
+type Mutation {
+    _root: Boolean
+}

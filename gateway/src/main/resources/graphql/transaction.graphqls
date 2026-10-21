@@ -1,0 +1,66 @@
+type Transaction {
+    id: ID!
+    orderId: Int
+    merchantId: Int
+    paymentMethod: String
+    amount: Int
+    paymentStatus: String
+    createdAt: String
+    updatedAt: String
+}
+
+type TransactionDeleteAt {
+    id: ID!
+    orderId: Int
+    merchantId: Int
+    paymentMethod: String
+    amount: Int
+    paymentStatus: String
+    createdAt: String
+    updatedAt: String
+    deletedAt: String
+}
+
+type TransactionPage {
+    data: [Transaction!]!
+    pagination: PaginationMeta!
+}
+
+type TransactionDeleteAtPage {
+    data: [TransactionDeleteAt!]!
+    pagination: PaginationMeta!
+}
+
+input CreateTransactionInput {
+    orderId: ID!
+    merchantId: ID!
+    paymentMethod: String!
+    amount: Int!
+}
+
+input UpdateTransactionInput {
+    transactionId: ID!
+    orderId: ID
+    merchantId: ID
+    paymentMethod: String
+    amount: Int
+    paymentStatus: String
+}
+
+extend type Query {
+    transactions(page: Int = 1, pageSize: Int = 10, search: String = ""): TransactionPage!
+    transaction(id: ID!): Transaction!
+    transactionsByMerchant(merchantId: ID!, page: Int = 1, pageSize: Int = 10, search: String = ""): TransactionPage!
+    activeTransactions(page: Int = 1, pageSize: Int = 10, search: String = ""): TransactionDeleteAtPage!
+    trashedTransactions(page: Int = 1, pageSize: Int = 10, search: String = ""): TransactionDeleteAtPage!
+}
+
+extend type Mutation {
+    createTransaction(input: CreateTransactionInput!): Transaction!
+    updateTransaction(input: UpdateTransactionInput!): Transaction!
+    trashTransaction(id: ID!): TransactionDeleteAt!
+    restoreTransaction(id: ID!): TransactionDeleteAt!
+    deleteTransactionPermanent(id: ID!): Boolean!
+    restoreAllTransactions: Boolean!
+    deleteAllTransactionsPermanent: Boolean!
+}

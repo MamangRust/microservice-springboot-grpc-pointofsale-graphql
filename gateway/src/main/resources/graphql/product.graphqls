@@ -1,0 +1,97 @@
+type Product {
+    id: ID!
+    merchantId: Int
+    categoryId: Int
+    name: String
+    description: String
+    price: Int
+    countInStock: Int
+    brand: String
+    weight: Int
+    "Proto `float`; exposed as `Float` (GraphQL `Int` input was a REST-only artefact)."
+    rating: Float
+    slugProduct: String
+    imageProduct: String
+    createdAt: String
+    updatedAt: String
+}
+
+type ProductDeleteAt {
+    id: ID!
+    merchantId: Int
+    categoryId: Int
+    name: String
+    description: String
+    price: Int
+    countInStock: Int
+    brand: String
+    weight: Int
+    rating: Float
+    slugProduct: String
+    imageProduct: String
+    createdAt: String
+    updatedAt: String
+    deletedAt: String
+}
+
+type ProductPage {
+    data: [Product!]!
+    pagination: PaginationMeta!
+}
+
+type ProductDeleteAtPage {
+    data: [ProductDeleteAt!]!
+    pagination: PaginationMeta!
+}
+
+input CreateProductInput {
+    merchantId: ID!
+    categoryId: ID!
+    name: String!
+    description: String
+    price: Int
+    countInStock: Int
+    brand: String
+    weight: Int
+    rating: Float
+    slugProduct: String
+    "Path produced by POST /api/upload."
+    imageProduct: String
+}
+
+input UpdateProductInput {
+    productId: ID!
+    merchantId: ID
+    categoryId: ID
+    name: String
+    description: String
+    price: Int
+    countInStock: Int
+    brand: String
+    weight: Int
+    rating: Float
+    slugProduct: String
+    "Path produced by POST /api/upload (omit to clear, matching the former REST behaviour)."
+    imageProduct: String
+}
+
+extend type Query {
+    products(page: Int = 1, pageSize: Int = 10, search: String = ""): ProductPage!
+    product(id: ID!): Product!
+    productsByMerchant(merchantId: ID!, categoryId: ID, minPrice: Int, maxPrice: Int,
+        page: Int = 1, pageSize: Int = 10, search: String = ""): ProductPage!
+    productsByCategory(categoryName: String!, minPrice: Int, maxPrice: Int,
+        page: Int = 1, pageSize: Int = 10, search: String = ""): ProductPage!
+    activeProducts(page: Int = 1, pageSize: Int = 10, search: String = ""): ProductDeleteAtPage!
+    trashedProducts(page: Int = 1, pageSize: Int = 10, search: String = ""): ProductDeleteAtPage!
+}
+
+extend type Mutation {
+    createProduct(input: CreateProductInput!): Product!
+    updateProduct(input: UpdateProductInput!): Product!
+    trashProduct(id: ID!): ProductDeleteAt!
+    restoreProduct(id: ID!): ProductDeleteAt!
+    deleteProductPermanent(id: ID!): Boolean!
+    restoreAllProducts: Boolean!
+    deleteAllProductsPermanent: Boolean!
+}

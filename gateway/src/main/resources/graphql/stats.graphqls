@@ -1,0 +1,12 @@
+type StatItem {
+    period: String
+    dimensionId: ID
+    value: Float
+}
+
+extend type Query {
+    monthlyRevenue(year: Int, month: Int): [StatItem!]!
+    yearlyRevenue(year: Int): [StatItem!]!
+    merchantSales(merchantId: ID, year: Int): [StatItem!]!
+    productSales(productId: ID, year: Int): [StatItem!]!
+}

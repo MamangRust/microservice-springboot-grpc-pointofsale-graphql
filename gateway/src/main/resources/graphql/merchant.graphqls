@@ -1,0 +1,74 @@
+type Merchant {
+    id: ID!
+    userId: Int
+    name: String
+    description: String
+    address: String
+    contactEmail: String
+    contactPhone: String
+    status: String
+    createdAt: String
+    updatedAt: String
+}
+
+type MerchantDeleteAt {
+    id: ID!
+    userId: Int
+    name: String
+    description: String
+    address: String
+    contactEmail: String
+    contactPhone: String
+    status: String
+    createdAt: String
+    updatedAt: String
+    deletedAt: String
+}
+
+type MerchantPage {
+    data: [Merchant!]!
+    pagination: PaginationMeta!
+}
+
+type MerchantDeleteAtPage {
+    data: [MerchantDeleteAt!]!
+    pagination: PaginationMeta!
+}
+
+input CreateMerchantInput {
+    userId: ID!
+    name: String!
+    description: String
+    address: String
+    contactEmail: String
+    contactPhone: String
+    status: String
+}
+
+input UpdateMerchantInput {
+    merchantId: ID!
+    userId: ID
+    name: String
+    description: String
+    address: String
+    contactEmail: String
+    contactPhone: String
+    status: String
+}
+
+extend type Query {
+    merchants(page: Int = 1, pageSize: Int = 10, search: String = ""): MerchantPage!
+    merchant(id: ID!): Merchant!
+    activeMerchants(page: Int = 1, pageSize: Int = 10, search: String = ""): MerchantDeleteAtPage!
+    trashedMerchants(page: Int = 1, pageSize: Int = 10, search: String = ""): MerchantDeleteAtPage!
+}
+
+extend type Mutation {
+    createMerchant(input: CreateMerchantInput!): Merchant!
+    updateMerchant(input: UpdateMerchantInput!): Merchant!
+    trashMerchant(id: ID!): MerchantDeleteAt!
+    restoreMerchant(id: ID!): MerchantDeleteAt!
+    deleteMerchantPermanent(id: ID!): Boolean!
+    restoreAllMerchants: Boolean!
+    deleteAllMerchantsPermanent: Boolean!
+}

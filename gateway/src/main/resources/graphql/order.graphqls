@@ -1,0 +1,72 @@
+type Order {
+    id: ID!
+    merchantId: Int
+    cashierId: Int
+    "Proto `int64`; GraphQL `Int` is 32-bit, so exposed as `Float`."
+    totalPrice: Float
+    createdAt: String
+    updatedAt: String
+}
+
+type OrderDeleteAt {
+    id: ID!
+    merchantId: Int
+    cashierId: Int
+    totalPrice: Float
+    createdAt: String
+    updatedAt: String
+    deletedAt: String
+}
+
+type OrderPage {
+    data: [Order!]!
+    pagination: PaginationMeta!
+}
+
+type OrderDeleteAtPage {
+    data: [OrderDeleteAt!]!
+    pagination: PaginationMeta!
+}
+
+input OrderItemInput {
+    productId: ID!
+    quantity: Int!
+    price: Int!
+}
+
+input UpdateOrderItemInput {
+    orderItemId: ID!
+    productId: ID
+    quantity: Int
+    price: Int
+}
+
+input CreateOrderInput {
+    merchantId: ID!
+    cashierId: ID!
+    items: [OrderItemInput!]!
+}
+
+input UpdateOrderInput {
+    orderId: ID!
+    cashierId: ID
+    items: [UpdateOrderItemInput!]
+}
+
+extend type Query {
+    orders(page: Int = 1, pageSize: Int = 10, search: String = ""): OrderPage!
+    order(id: ID!): Order!
+    activeOrders(page: Int = 1, pageSize: Int = 10, search: String = ""): OrderDeleteAtPage!
+    trashedOrders(page: Int = 1, pageSize: Int = 10, search: String = ""): OrderDeleteAtPage!
+    ordersByMerchant(merchantId: ID!, page: Int = 1, pageSize: Int = 10, search: String = ""): OrderPage!
+}
+
+extend type Mutation {
+    createOrder(input: CreateOrderInput!): Order!
+    updateOrder(input: UpdateOrderInput!): Order!
+    trashOrder(id: ID!): OrderDeleteAt!
+    restoreOrder(id: ID!): OrderDeleteAt!
+    deleteOrderPermanent(id: ID!): Boolean!
+    restoreAllOrders: Boolean!
+    deleteAllOrdersPermanent: Boolean!
+}
